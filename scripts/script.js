@@ -3,6 +3,8 @@
  * FUNCIONES
  * 
  **/
+
+
 function eraseText() {
     document.getElementById("text-area").value = "";
 }
@@ -16,7 +18,7 @@ function getTextArea() {
 
 function isCharNumber(c) {
     if (/[+-]?([0-9]*[.])?[0-9]+/.test(c) || c == ".")
-        return true;
+    return true;
 }
 
 
@@ -28,8 +30,14 @@ function isChar(c) {
 function doubleOperator(aux, actual, resul, operator="Operador") {
     if(aux == actual[0]) {
         actual[0] += aux;
-        resul.pop();
-        resul.push(`${actual[0]}\t -> Es un ${operator} de ${actual[0].length} caracteres\n`);
+        if (actual[0] == "//") {
+            resul.pop();
+            comment = 1
+        }
+        else {
+            resul.pop();
+            resul.push(`${actual[0]}\t -> Es un ${operator} de ${actual[0].length} caracteres\n`);
+        }
     }
     else {
         resul.push(`${aux}\t -> Es un ${operator} de ${aux.length} caracteres\n`);
@@ -58,7 +66,7 @@ function comparisonOperator(aux, actual, resul, operator="Operador") {
  * 
  * ALFABETO
  * 
- **/
+**/
 var conditionals = new Map([
     ["if", "IF"],
     ["else", "ELSE"],
@@ -88,12 +96,13 @@ var functions = new Map([
     ["main", "MAIN"],
 ])
 
+var comment = 0
 
 /**
  * 
  * FUNCION PRINCIPAL
  * 
- **/
+**/
 function main() {
     var text = getTextArea();
     let aux, resul =[];
@@ -172,8 +181,14 @@ function main() {
                                 }
                                 // ID
                                 if(isChar(id)) {
-                                    resul.push(`${id}\t -> Es un ID de ${id.length} caracteres\n`);
-                                    id = ""
+                                    if (comment == 1) {
+                                        console.log(id, "Es un comentario")
+                                        comment = 0
+                                    }
+                                    else {
+                                        resul.push(`${id}\t -> Es un ID de ${id.length} caracteres\n`);
+                                        id = ""
+                                    }
                                 }
                             }
                         }
